@@ -1,5 +1,5 @@
-# influencer_iitm_mad1
-# by Surya Prakash V - 21f3001344
+# Influencer-Sponsership collabration platform
+by Surya Prakash V - 21f3001344
 Welcome to the Influencer-Sponsership collabration platform! This project is a simple web application for connecting brands and influencers. Created for the submission of MAD - 1 project.
 
 ## Table of Contents
@@ -40,16 +40,10 @@ Werkzeug==2.0.1
 Open a terminal or command prompt.
 Navigate to your project directory, where your app.py files are located.
 Run a Python interactive shell or execute the following commands in your terminal:
-
-flask shell
-
->>> from app import db
->>> 
->>> db.create_all()
->>> 
->>> exit()
-
-flask run
+    ```bash
+    from app import db
+    db.create_all()
+    exit()
 
 5. Run the application:
 python app.py
