@@ -42,8 +42,11 @@ Navigate to your project directory, where your app.py files are located.
 Run a Python interactive shell or execute the following commands in your terminal:
 
 flask shell
+
 >>> from app import db
+>>> 
 >>> db.create_all()
+>>> 
 >>> exit()
 
 flask run
