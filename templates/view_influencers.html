@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Influencers</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container mt-4">
+        <h1>All Influencers</h1>
+        {% if influencers %}
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Category</th>
+                        <th>Niche</th>
+                        <th>Reach</th>
+                        <th>Profile</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for influencer in influencers %}
+                        <tr>
+                            <td>{{ influencer.user.username }}</td>
+                            <td>{{ influencer.category }}</td>
+                            <td>{{ influencer.niche }}</td>
+                            <td>{{ influencer.reach }}</td>
+                            <td>
+                                <a href="{{ url_for('view_profile', user_id=influencer.user_id) }}" class="btn btn-info btn-sm">View Profile</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p>No influencers found.</p>
+        {% endif %}
+        <p><a href="{{ url_for('logout') }}">Logout</a></p>
+        <!-- Back to Dashboard Button -->
+        <a href="{{ url_for('influencer_dashboard') if current_user.is_influencer else url_for('sponsor_dashboard') }}" class="btn btn-secondary mb-3">Back to Dashboard</a>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

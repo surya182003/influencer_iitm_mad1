@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Ad Requests</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container mt-4">
+        <h1>Ad Requests</h1>
+        {% for ad_request in ad_requests %}
+            <div class="border p-3 mb-3">
+                <h3>Campaign: {{ ad_request.campaign.name }}</h3>
+                <p>Status: {{ ad_request.status }}</p>
+                <p><strong>Influencer ID:</strong> {{ ad_request.influencer.id }}</p>
+                <p><strong>Influencer Username:</strong> {{ ad_request.influencer.username }}</p>
+                <form method="POST">
+                    <input type="hidden" name="ad_request_id" value="{{ ad_request.id }}">
+                    <div class="form-group">
+                        <label for="status">Update Status:</label>
+                        <select name="status" class="form-control">
+                            <option value="accepted">Accept</option>
+                            <option value="rejected">Reject</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="payment_amount">Negotiate Payment:</label>
+                        <input type="number" name="payment_amount" value="{{ ad_request.payment_amount }}" class="form-control">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Update</button>
+                </form>
+            </div>
+        <hr>
+        {% endfor %}
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

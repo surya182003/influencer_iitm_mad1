@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Influencer Dashboard</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container mt-4">
+        <h1>Influencer Dashboard</h1>
+
+        <!-- Buttons for profile actions -->
+        <div class="mb-3">
+            <a href="{{ url_for('update_profile') }}" class="btn btn-primary">Edit Profile</a>
+            <a href="{{ url_for('view_profile', user_id=current_user.id) }}" class="btn btn-info">View Profile</a>
+            <a href="{{ url_for('public_campaigns') }}" class="btn btn-secondary">See Public Campaigns</a>
+        </div>
+
+        <h2>Notifications</h2>
+        <ul>
+            {% for notification in current_user.notifications %}
+                <li>{{ notification.message }} - <strong>{% if not notification.is_read %}New{% endif %}</strong></li>
+            {% endfor %}
+        </ul>
+
+        <h2>Your Ad Requests</h2>
+        
+        {% if ad_requests %}
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Campaign Name</th>
+                        <th>Requirements</th>
+                        <th>Payment Amount</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for ad_request in ad_requests %}
+                        <tr>
+                            <td>{{ ad_request.campaign.name }}</td>
+                            <td>{{ ad_request.requirements }}</td>
+                            <td>{{ ad_request.payment_amount }}</td>
+                            <td>{{ ad_request.status }}</td>
+                            <td>
+                                {% if ad_request.status == 'pending' %}
+                                    {% if ad_request.campaign.visibility == 'private' %}
+                                        <form method="POST" action="{{ url_for('accept_ad_request', ad_request_id=ad_request.id) }}" style="display:inline;">
+                                            <button type="submit" class="btn btn-success btn-sm">Accept</button>
+                                        </form>
+                                        <form method="POST" action="{{ url_for('reject_ad_request', ad_request_id=ad_request.id) }}" style="display:inline;">
+                                            <button type="submit" class="btn btn-danger btn-sm">Reject</button>
+                                        </form>
+                                        <a href="{{ url_for('negotiate_ad_request', ad_request_id=ad_request.id) }}" class="btn btn-warning btn-sm">Negotiate</a>
+                                    {% else %}
+                                        <span class="text-muted">You cannot accept or reject your own request.</span>
+                                    {% endif %}
+                                {% elif ad_request.status == 'Accepted' %}
+                                    <span class="badge badge-success">Accepted</span>
+                                {% elif ad_request.status == 'Rejected' %}
+                                    <span class="badge badge-danger">Rejected</span>
+                                {% elif ad_request.status == 'Negotiating' %}
+                                    <span class="badge badge-warning">Negotiating</span>
+                                {% else %}
+                                    <span class="badge badge-secondary">Unknown Status</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p>You have no ad requests yet. Keep an eye on ongoing campaigns!</p>
+        {% endif %}
+        
+        <p><a href="{{ url_for('logout') }}">Logout</a></p>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

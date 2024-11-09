@@ -1,0 +1,9 @@
+<h1>Your Campaigns</h1>
+{% for campaign in campaigns %}
+    <h3>{{ campaign.name }}</h3>
+    <p>{{ campaign.description }}</p>
+    <p>Budget: {{ campaign.budget }}</p>
+    <p>Visibility: {{ campaign.visibility }}</p>
+    <p>Status: {{ campaign.ad_requests|length }} ad requests</p>
+    <hr>
+{% endfor %}

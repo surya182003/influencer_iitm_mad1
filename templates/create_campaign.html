@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Campaign</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script>
+        function toggleInfluencerSelection() {
+            var visibility = document.querySelector('select[name="visibility"]').value;
+            var influencerSection = document.getElementById('influencer-section');
+            // Show influencer section only if visibility is private
+            if (visibility === 'private') {
+                influencerSection.style.display = 'block';
+                document.querySelector('select[name="influencer_id"]').required = true;
+                document.querySelector('textarea[name="requirements"]').required = true;
+                document.querySelector('input[name="payment_amount"]').required = true;
+            } else {
+                influencerSection.style.display = 'none';
+                document.querySelector('select[name="influencer_id"]').required = false;
+                document.querySelector('textarea[name="requirements"]').required = false;
+                document.querySelector('input[name="payment_amount"]').required = false;
+            }
+        }
+
+        // Ensure the correct state on page load
+        window.onload = toggleInfluencerSelection;
+    </script>
+</head>
+<body>
+    <div class="container mt-4">
+        <h1>Create Campaign</h1>
+        <form method="POST" action="{{ url_for('create_campaign') }}">
+            <div class="form-group">
+                <label for="name">Campaign Name:</label>
+                <input type="text" class="form-control" name="name" required>
+            </div>
+
+            <div class="form-group">
+                <label for="description">Description:</label>
+                <textarea class="form-control" name="description" required></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="start_date">Start Date:</label>
+                <input type="date" class="form-control" name="start_date" required>
+            </div>
+
+            <div class="form-group">
+                <label for="end_date">End Date:</label>
+                <input type="date" class="form-control" name="end_date" required>
+            </div>
+
+            <div class="form-group">
+                <label for="budget">Budget:</label>
+                <input type="number" class="form-control" name="budget" required>
+            </div>
+
+            <div class="form-group">
+                <label for="visibility">Visibility:</label>
+                <select name="visibility" class="form-control" onchange="toggleInfluencerSelection()" required>
+                    <option value="public">Public</option>
+                    <option value="private">Private</option>
+                </select>
+            </div>
+
+            <div id="influencer-section" style="display: none;">
+                <h5>Select Influencers for the Campaign:</h5>
+                <div class="form-group">
+                    <label for="influencer_id">Select Influencer:</label>
+                    <select class="form-control" name="influencer_id">
+                        <option value="">-- Select Influencer --</option>
+                        {% for influencer in influencers %}
+                            <option value="{{ influencer.id }}">{{ influencer.username }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="requirements">Ad Requirements:</label>
+                    <textarea class="form-control" name="requirements"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="payment_amount">Payment Amount:</label>
+                    <input type="number" class="form-control" name="payment_amount">
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Create Campaign</button>
+        </form>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

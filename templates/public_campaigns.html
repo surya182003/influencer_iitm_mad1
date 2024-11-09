@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Public Campaigns</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container mt-4">
+        <h1>Public Campaigns</h1>
+
+        <!-- Search by Category -->
+        <form method="GET" action="{{ url_for('public_campaigns') }}" class="mb-3">
+            <div class="form-group">
+                <label for="category">Select Category:</label>
+                <select name="category_id" class="form-control" onchange="this.form.submit()">
+                    <option value="">All Categories</option>
+                    {% for category in categories %}
+                        <option value="{{ category.id }}" {% if request.args.get('category_id') == category.id|string %}selected{% endif %}>{{ category.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </form>
+        
+        {% if campaigns %}
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Description</th>
+                        <th>Start Date</th>
+                        <th>End Date</th>
+                        <th>Budget</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for campaign in campaigns %}
+                        <tr>
+                            <td>{{ campaign.name }}</td>
+                            <td>{{ campaign.description }}</td>
+                            <td>{{ campaign.start_date }}</td>
+                            <td>{{ campaign.end_date }}</td>
+                            <td>{{ campaign.budget }}</td>
+                            <td>
+                                <!-- If the user is an influencer, show the form to send ad request -->
+                                {% if current_user.is_influencer %}
+                                    <form action="{{ url_for('send_ad_request', campaign_id=campaign.id) }}" method="POST">
+                                        <div class="form-group">
+                                            <label for="requirements">Ad Requirements:</label>
+                                            <textarea class="form-control" name="requirements" required></textarea>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="payment_amount">Proposed Payment Amount:</label>
+                                            <input type="number" class="form-control" name="payment_amount" required>
+                                        </div>
+                                        <button type="submit" class="btn btn-primary">Send Ad Request</button>
+                                    </form>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p>No public campaigns available at the moment.</p>
+        {% endif %}
+        <!-- Back to Dashboard Button -->
+        <a href="{{ url_for('influencer_dashboard') if current_user.is_influencer else 'sponsor_dashboard' }}" class="btn btn-secondary mb-3">Back to Dashboard</a>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
